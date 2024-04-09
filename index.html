@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digit Classifier</title>
+</head>
+<body>
+  <form id="form" enctype="multipart/form-data">
+    <input type="file" name="file" accept="image/*"/>
+    <input type="submit"/>
+    <p id="prediciton"></p>
+  </form>
+  <script>
+    const form = document.getElementById('form');
+    const prediction = document.getElementById('prediciton');
+    form.addEventListener('submit',async (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      try {
+       const response = await fetch('http://localhost:8000/predict-image/', {
+          method: 'POST',
+          body: formData
+        }); 
+        const data = await response.json();
+        prediction.innerHTML = 'Prediction: ' + data.prediction;
+      } catch (err) {
+        console.error('Error: ', err);
+        alert('Failed!')
+      }
+    });
+  </script>
+</body>
+</html>
